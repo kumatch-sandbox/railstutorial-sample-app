@@ -70,4 +70,19 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     delete logout_path
     assert cookies['remember_token'].blank?
   end
+
+  test "successful friendly forwarding URL once" do
+    # 0. ログイン要求ページにアクセス
+    get edit_user_path(@user)
+    assert_redirected_to login_url
+
+    # 1. ログインすると元の行き先URLへForward
+    log_in_as(@user)
+    assert_redirected_to edit_user_url(@user)
+
+    # 2. ログアウトしてすぐログインすると次は通常ページへForward
+    delete logout_path
+    log_in_as(@user)
+    assert_redirected_to user_url(@user)
+  end
 end
