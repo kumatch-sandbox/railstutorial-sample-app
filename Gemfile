@@ -39,6 +39,13 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # page style
 gem 'bootstrap-sass', '3.3.7'
 
+# mock data
+gem 'faker', '~> 1.9.1'
+
+# pagination
+gem 'will_paginate',           '3.1.6'
+gem 'bootstrap-will_paginate', '1.0.0'
+
 group :production do
   gem 'pg', '0.20.0'
 end
