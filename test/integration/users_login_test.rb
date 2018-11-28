@@ -41,12 +41,33 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     # 4. logout
     delete logout_path
     assert_not is_logged_in?
+    assert_redirected_to root_url
+
+    # 4'. 2番目のウィンドウでログアウトをクリックするユーザーをシミュレートする
+    delete logout_path
 
     # 5. redirect after logout
-    assert_redirected_to root_url
     follow_redirect!
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", logout_path,      count: 0
     assert_select "a[href=?]", user_path(@user), count: 0
-  end  
+  end
+
+  test "login with remembering" do
+    log_in_as(@user, remember_me: '1')
+    assert cookies['remember_token'].present?
+  end
+
+  test "login without remembering" do
+    log_in_as(@user, remember_me: '0')
+    assert cookies['remember_token'].blank?
+  end
+
+  test "loginout after not remembering" do
+    log_in_as(@user, remember_me: '1')
+    assert cookies['remember_token'].present?
+
+    delete logout_path
+    assert cookies['remember_token'].blank?
+  end
 end
