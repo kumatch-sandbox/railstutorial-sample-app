@@ -31,9 +31,15 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
-
+  config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
+
+  # Tell Action Mailer not to deliver emails to the real world.
+  # The :test delivery method accumulates sent emails in the
+  # ActionMailer::Base.deliveries array.
+  config.action_mailer.delivery_method = :test
+  host = 'localhost:3000' # fix yourself host.
+  config.action_mailer.default_url_options = { host: host, protocol: 'https' }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

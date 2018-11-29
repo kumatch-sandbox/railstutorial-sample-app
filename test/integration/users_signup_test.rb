@@ -31,8 +31,9 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
         }
     end
     follow_redirect!
-    assert_template 'users/show'
-    assert flash[:success]
-    assert is_logged_in?
+    # required activation
+    assert_template root_path
+    assert flash[:info]
+    assert_not is_logged_in?
   end  
 end
