@@ -2,8 +2,18 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(name: "Foo", email: "foo@example.com",
-      password: "foobar", password_confirmation: "foobar")
+    @remember_token = 'remember_token_01'
+    @activation_token = 'activation_token_02'
+
+    @user = User.new(
+        name: "Foo",
+        email: "foo@example.com",
+        password: "foobar",
+        password_confirmation: "foobar",
+        remember_digest: User.digest(@remember_token),
+        activation_digest: User.digest(@activation_token),
+    )
+
   end
 
   test "should be valid" do
@@ -70,7 +80,17 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
-  test "authenticated? should return false for a user with nil digest" do
-    assert_not @user.authenticated?('')
+  test "authenticated? should return false for a user with blank digest" do
+    assert_not @user.authenticated?(:password, nil)
+    assert_not @user.authenticated?(:password, '')
+    assert_not @user.authenticated?(:remember, nil)
+    assert_not @user.authenticated?(:remember, '')
+    assert_not @user.authenticated?(:activation, nil)
+    assert_not @user.authenticated?(:activation, '')
+  end
+
+  test "authenticated? should return true for a user with valid digest" do
+    assert @user.authenticated?(:remember, @remember_token)
+    assert @user.authenticated?(:activation, @activation_token)
   end
 end
