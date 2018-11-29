@@ -63,7 +63,15 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "railstutorial-sample-app_#{Rails.env}"
 
+  # Don't care if the mailer can't send.
+  config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
+  # Tell Action Mailer not to deliver emails to the real world.
+  # The :test delivery method accumulates sent emails in the
+  # ActionMailer::Base.deliveries array.
+  config.action_mailer.delivery_method = :test
+  # fix yourself host.
+  config.action_mailer.default_url_options = { host: 'localhost:3000', protocol: 'http' }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
