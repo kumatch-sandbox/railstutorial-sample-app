@@ -34,3 +34,6 @@ vendor/bundle
 
 # Ignore Spring files.
 /spring/*.pid
+
+# Upload files
+/public/uploads
